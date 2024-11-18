@@ -3,15 +3,23 @@ using UnityEngine;
 public class GoblinSpawner : MonoBehaviour
 {
     public GameObject goblin;
+    public BoundaryManager boundaryManager;
 
     public void SpawnGoblin()
     {
-    
-        float spawnPointX = Random.Range(0.1f, 3f);
-        float spawnPointY = 0f;
-        float spawnPointZ = Random.Range(0.1f, 3f);
+        if (boundaryManager == null)
+        {
+            Debug.LogError("Boundary Manager is not assigned!");
+            return;
+        }
 
-        Vector3 spawnPosition = new Vector3(spawnPointX, spawnPointY, spawnPointZ);
+        Vector3 spawnPosition = boundaryManager.GetRandomPositionInsideRoom();
+
+        if (spawnPosition == Vector3.zero)
+        {
+            Debug.LogWarning("No valid spawn position found inside the room!");
+            return;
+        }
 
         if (goblin != null)
         {
