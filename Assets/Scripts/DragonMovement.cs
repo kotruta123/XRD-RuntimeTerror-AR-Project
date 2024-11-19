@@ -7,6 +7,7 @@ public class DragonMovement : MonoBehaviour
     public float groundSpeed = 2f;
     public float flySpeed = 3f;
     private bool isFlying = false;
+    private AudioSource _audioSource;
 
     void Update()
     {
@@ -31,11 +32,18 @@ public class DragonMovement : MonoBehaviour
     {
         isFlying = true;
         dragonAnimator.SetBool("isFlying", true);
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource != null)
+        {
+            _audioSource.pitch = 0.85f;
+            _audioSource.Play();
+        }
     }
 
     public void Land()
     {
         isFlying = false;
         dragonAnimator.SetBool("isFlying", false);
+        _audioSource.Stop();
     }
 }
