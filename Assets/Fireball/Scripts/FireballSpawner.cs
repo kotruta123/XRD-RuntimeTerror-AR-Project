@@ -50,13 +50,10 @@ public class FireballSpawner : MonoBehaviour
         // Create a Raycast from the camera through the mouse position
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red, 2f);
-
         RaycastHit hit;
 
-        int layerMask = LayerMask.GetMask("Goblins");
         // Check if the Raycast hits any object
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             // Check if the clicked object is tagged as "Goblin"
             if (hit.collider.CompareTag("Goblin"))

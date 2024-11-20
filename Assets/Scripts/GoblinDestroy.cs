@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GoblinDestroy : MonoBehaviour
 {
-    public int health = 1; // The health of the goblin
+    public int health = 3; // The health of the goblin
 
     private void OnCollisionEnter(Collision collision)
     {
