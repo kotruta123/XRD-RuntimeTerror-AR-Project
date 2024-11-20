@@ -4953,3 +4953,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 4635652274153978578, guid: be9e2c3e6f948294cb1048ade3424926,
     type: 3}
+  lifetime: 5

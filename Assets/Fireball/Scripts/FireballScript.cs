@@ -7,6 +7,7 @@ public class FireballScript : MonoBehaviour
     private Rigidbody rb; // The Rigidbody of the fireball
     private float speed; // The speed of the fireball
     private System.Action onFireballDestroyed; // Callback to notify the spawner when the fireball is destroyed
+    public float lifetime = 5f; // Time before fireball is destroyed if it misses
 
     private void Start()
     {
@@ -16,6 +17,9 @@ public class FireballScript : MonoBehaviour
         {
             MoveTowardsTarget(); // Move the fireball toward the target
         }
+
+        // Destroy fireball after a set lifetime
+        Destroy(gameObject, lifetime);
     }
 
     public void SetTarget(Transform newTarget, float fireballSpeed, System.Action destroyCallback)

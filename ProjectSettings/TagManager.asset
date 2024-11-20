@@ -7,6 +7,7 @@ TagManager:
   - StaticTarget
   - Goblin
   - Fireball
+  - TargetLine
   layers:
   - Default
   - TransparentFX
