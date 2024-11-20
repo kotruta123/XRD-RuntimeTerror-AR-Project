@@ -10,7 +10,7 @@ public class FireballSpawner : MonoBehaviour
 
     private PlayerInputActions inputActions; // Stores the player's input actions
     private GameObject activeFireball; // Tracks the currently active fireball
-
+    
     private void Awake()
     {
         // Initialize input actions
@@ -50,11 +50,13 @@ public class FireballSpawner : MonoBehaviour
         // Create a Raycast from the camera through the mouse position
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
+        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red, 2f);
+
         RaycastHit hit;
 
-        float sphereRadius = 0.2f;
+        int layerMask = LayerMask.GetMask("Goblins");
         // Check if the Raycast hits any object
-        if (Physics.SphereCast(ray, sphereRadius, out hit, Mathf.Infinity))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
             // Check if the clicked object is tagged as "Goblin"
             if (hit.collider.CompareTag("Goblin"))

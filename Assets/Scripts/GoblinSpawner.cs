@@ -23,16 +23,17 @@ public class GoblinSpawner : MonoBehaviour
     {
         Camera mainCamera = Camera.main;
 
-        // Manually define spawn bounds
-        float spawnDistance = 1f; // Depth from the camera
+        // Manually define spawn bounds at a fixed distance from the camera
+        float spawnDistance = 5f; // Distance from the camera
         Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0, 0, spawnDistance));
         Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(1, 1, spawnDistance));
 
-        // Use bottom-left and top-right to calculate random positions
-        float floorY = 0f;
-        float randomX = UnityEngine.Random.Range(bottomLeft.x, topRight.x);
-        float randomZ = UnityEngine.Random.Range(spawnDistance - 2f, spawnDistance + 1f); // Custom Z range
+        // Randomize positions within the visible area
+        float randomX = Random.Range(bottomLeft.x, topRight.x);
+        float randomZ = Random.Range(bottomLeft.z, topRight.z);
 
-        return new Vector3(randomX, floorY, randomZ);
+        float groundY = 0f; // Y-coordinate for the ground level
+        return new Vector3(randomX, groundY, randomZ);
     }
+
 }
