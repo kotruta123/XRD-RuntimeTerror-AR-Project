@@ -8,6 +8,13 @@ public class GoblinSpawner : MonoBehaviour
     public float spawnDistance = 5f; // Distance from the camera
     public int maxRetryAttempts = 100; // Maximum retries to prevent infinite loops
     private List<Vector3> usedPositions = new List<Vector3>(); // List to track recent spawn positions
+    private AudioSource _audioSource; // Audio source for sound effects
+
+    private void Start()
+    {
+        // Initialize the audio source component
+        _audioSource = GetComponent<AudioSource>();
+    }
 
     public void SpawnGoblin()
     {
@@ -16,11 +23,28 @@ public class GoblinSpawner : MonoBehaviour
         {
             Vector3 spawnPosition = GetUniquePosition();
             Instantiate(goblinPrefab, spawnPosition, Quaternion.identity); // Instantiate the goblin
+
+            // Play spawn sound effect
+            if (_audioSource != null)
+            {
+                _audioSource.Play();
+            }
         }
         else
         {
             Debug.LogError("Goblin prefab is not assigned in the Inspector!");
         }
+    }
+
+    public void OnDestroy()
+    {
+        // Play destruction sound effect before destroying the object
+        if (_audioSource != null)
+        {
+            _audioSource.volume = 1.0f;
+            _audioSource.Play();
+        }
+        Destroy(gameObject);
     }
 
     private Vector3 GetUniquePosition()
