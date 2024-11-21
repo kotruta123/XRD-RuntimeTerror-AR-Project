@@ -7,7 +7,6 @@ public class FireballScript : MonoBehaviour
     private Rigidbody rb; // The Rigidbody of the fireball
     private float speed; // The speed of the fireball
     private System.Action onFireballDestroyed; // Callback to notify the spawner when the fireball is destroyed
-    public float lifetime = 5f; // Time before fireball is destroyed if it misses
     private AudioSource _audioSource;
 
     private void Start()
@@ -19,11 +18,12 @@ public class FireballScript : MonoBehaviour
             MoveTowardsTarget(); // Move the fireball toward the target
         }
         _audioSource = GetComponent<AudioSource>();
-        if (_audioSource != null) {
-            _audioSource.Play();        
+        if (_audioSource != null)
+        {
+            _audioSource.Play();
         }
         // Destroy the fireball after a few seconds
-        Destroy(gameObject, lifeTime);
+        Destroy(gameObject, 5f);
     }
 
     public void SetTarget(Transform newTarget, float fireballSpeed, System.Action destroyCallback)

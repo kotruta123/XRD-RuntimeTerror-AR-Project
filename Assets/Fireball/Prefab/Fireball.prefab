@@ -15,10 +15,10 @@ GameObject:
   - component: {fileID: 6997059706807041845}
   - component: {fileID: 7641310440600697391}
   - component: {fileID: 7834532058096075875}
-  - component: {fileID: 8733322474054125579}
+  - component: {fileID: 5496746862936113332}
   m_Layer: 0
   m_Name: Fireball
-  m_TagString: Untagged
+  m_TagString: Fireball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4939,7 +4939,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &8733322474054125579
+--- !u!114 &5496746862936113332
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4953,4 +4953,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionEffect: {fileID: 4635652274153978578, guid: be9e2c3e6f948294cb1048ade3424926,
     type: 3}
-  lifetime: 5
