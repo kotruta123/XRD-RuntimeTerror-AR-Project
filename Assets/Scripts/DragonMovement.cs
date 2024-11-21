@@ -19,6 +19,9 @@ public class DragonMovement : MonoBehaviour
         Fly(); // Start in flying mode
     }
 
+
+    private AudioSource _audioSource;
+
     void Update()
     {
         float moveX = joystick.Horizontal; // Horizontal joystick movement
@@ -66,6 +69,12 @@ public class DragonMovement : MonoBehaviour
         isFlying = true;
         rb.useGravity = false; // Disable gravity during flight
         dragonAnimator.SetBool("isFlying", true);
+        _audioSource = GetComponent<AudioSource>();
+        if (_audioSource != null)
+        {
+            _audioSource.pitch = 0.85f;
+            _audioSource.Play();
+        }
     }
 
     public void Land()
@@ -86,6 +95,7 @@ public class DragonMovement : MonoBehaviour
             Debug.LogWarning("No horizontal plane detected. Landing at default height.");
             transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
         }
+        _audioSource.Stop();
     }
 
 
