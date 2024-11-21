@@ -24,8 +24,8 @@ public class DragonMovement : MonoBehaviour
 
     void Update()
     {
-        float moveX = joystick.Horizontal; // Horizontal joystick movement
-        float moveZ = joystick.Vertical; // Vertical joystick movement
+        float moveX = joystick.Horizontal; // Horizontal input
+        float moveZ = joystick.Vertical;   // Vertical input
 
         if (isFlying)
         {
@@ -37,32 +37,34 @@ public class DragonMovement : MonoBehaviour
         }
     }
 
-    void WalkMovement(float moveX, float moveZ)
-    {
-        Vector3 direction = new Vector3(moveX, 0, moveZ).normalized;
-
-        if (direction.magnitude > 0.1f)
-        {
-            Vector3 targetPosition = transform.position + direction * groundSpeed * Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * groundSpeed);
-            dragonAnimator.SetBool("isWalking", true);
-        }
-        else
-        {
-            dragonAnimator.SetBool("isWalking", false);
-        }
-    }
-
     void FlyMovement(float moveX, float moveZ)
     {
-        Vector3 horizontalMovement = new Vector3(moveX, 0, moveZ).normalized * flySpeed * Time.deltaTime;
-        float verticalMovement = joystick.Vertical * heightSpeed * Time.deltaTime;
+        Vector3 movementDirection = new Vector3(moveX, 0, moveZ).normalized;
 
-        Vector3 targetPosition = transform.position + horizontalMovement + new Vector3(0, verticalMovement, 0);
+        if (movementDirection.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movementDirection, Vector3.up); // Rotate in movement direction
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
 
-        transform.position = targetPosition;
-        dragonAnimator.SetBool("isFlying", true);
+            Vector3 movement = movementDirection * flySpeed * Time.deltaTime;
+            transform.position += movement;
+        }
     }
+
+    void WalkMovement(float moveX, float moveZ)
+    {
+        Vector3 movementDirection = new Vector3(moveX, 0, moveZ).normalized;
+
+        if (movementDirection.magnitude > 0.1f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movementDirection, Vector3.up); // Rotate in movement direction
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+
+            Vector3 movement = movementDirection * groundSpeed * Time.deltaTime;
+            transform.position += movement;
+        }
+    }
+
 
     public void Fly()
     {

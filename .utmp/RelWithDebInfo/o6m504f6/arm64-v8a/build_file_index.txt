@@ -1,0 +1,2 @@
+C:\Users\alexk\Desktop\XRD-RuntimeTerror-AR-Project\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\alexk\Desktop\XRD-RuntimeTerror-AR-Project\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

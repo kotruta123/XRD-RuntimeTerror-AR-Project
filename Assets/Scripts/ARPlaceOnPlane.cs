@@ -14,29 +14,33 @@ public class ARPlaceOnPlane : MonoBehaviour
 
     void Update()
     {
-        if (raycastManager == null)
+        if (raycastManager == null || planeManager == null)
         {
-            Debug.LogError("Raycast Manager is not assigned!");
-            return;
-        }
-        if (planeManager == null)
-        {
-            Debug.LogError("Plane Manager is not assigned!");
+            Debug.LogError("Raycast Manager or Plane Manager is not assigned!");
             return;
         }
 
         // Detect touch input for dragon placement
-        if (Input.touchCount > 0 && spawnedDragon == null)
+        if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
-            if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+            // Check if the dragon is already in the scene
+            if (spawnedDragon == null && GameObject.Find("Purple(Clone)") == null) 
             {
-                Pose hitPose = hits[0].pose;
-                spawnedDragon = Instantiate(dragonPrefab, hitPose.position, hitPose.rotation);
+                if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+                {
+                    Pose hitPose = hits[0].pose;
+                    spawnedDragon = Instantiate(dragonPrefab, hitPose.position, hitPose.rotation);
+                    spawnedDragon.name = "Purple"; // Ensure consistent naming
+                    Debug.Log("Dragon spawned at position: " + hitPose.position);
+                }
             }
         }
     }
+
+
+
 
 
     void PreventExitingBounds()
