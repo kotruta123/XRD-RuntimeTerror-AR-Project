@@ -63,11 +63,14 @@ public class GameManager : MonoBehaviour
         {
             waveManager.enabled = false; // Stop further wave spawning
         }
+
+        Time.timeScale = 0f;
     }
 
     public void RestartGame()
     {
         Debug.Log("Restarting game...");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene
+        Time.timeScale = 1f;
     }
 }
