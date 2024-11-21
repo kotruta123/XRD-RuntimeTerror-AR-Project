@@ -8,6 +8,7 @@ TagManager:
   - Goblin
   - Fireball
   - TargetLine
+  - Dragon
   layers:
   - Default
   - TransparentFX
