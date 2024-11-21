@@ -4951,4 +4951,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f15abcc405ced4d858e8ed9aef229f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 3
+  explosionEffect: {fileID: 4635652274153978578, guid: be9e2c3e6f948294cb1048ade3424926,
+    type: 3}
+  lifetime: 5

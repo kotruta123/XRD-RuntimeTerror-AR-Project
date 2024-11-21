@@ -6,7 +6,7 @@ public class FireballSpawner : MonoBehaviour
 {
     public GameObject fireballPrefab; // The fireball prefab to instantiate
     public Transform fireballSpawnPoint; // The point where the fireball will be spawned
-    public float fireballSpeed = 1f; // Speed of the fireball
+    public float fireballSpeed = 2f; // Speed of the fireball
 
     private PlayerInputActions inputActions; // Stores the player's input actions
     private GameObject activeFireball; // Tracks the currently active fireball

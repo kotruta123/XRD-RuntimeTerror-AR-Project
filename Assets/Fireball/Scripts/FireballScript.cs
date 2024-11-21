@@ -7,7 +7,7 @@ public class FireballScript : MonoBehaviour
     private Rigidbody rb; // The Rigidbody of the fireball
     private float speed; // The speed of the fireball
     private System.Action onFireballDestroyed; // Callback to notify the spawner when the fireball is destroyed
-    public float lifeTime = 3f;
+    public float lifetime = 5f; // Time before fireball is destroyed if it misses
     private AudioSource _audioSource;
 
     private void Start()
