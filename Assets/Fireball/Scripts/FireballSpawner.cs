@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class FireballSpawner : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class FireballSpawner : MonoBehaviour
 
     private PlayerInputActions inputActions; // Stores the player's input actions
     private GameObject activeFireball; // Tracks the currently active fireball
-    
+    private bool isPointerOverUI = false; // Tracks if the pointer is over the UI
+
     private void Awake()
     {
         // Initialize input actions
@@ -31,12 +33,18 @@ public class FireballSpawner : MonoBehaviour
         inputActions.Player.Disable();
     }
 
+    private void Update()
+    {
+        // Continuously track whether the pointer is over the UI
+        isPointerOverUI = IsPointerOverSpecificUI();
+    }
+
     private void OnClickPerformed(InputAction.CallbackContext context)
     {
-        // Check if the pointer is over a UI element, and ignore clicks on UI
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        // Check if the pointer is over a specific UI element
+        if (isPointerOverUI)
         {
-            Debug.Log("Pointer is over a UI element. Raycast ignored.");
+            Debug.Log("Pointer is over the joystick. Raycast ignored.");
             return;
         }
 
@@ -86,5 +94,30 @@ public class FireballSpawner : MonoBehaviour
     private void OnFireballDestroyed()
     {
         activeFireball = null;
+    }
+
+    private bool IsPointerOverSpecificUI()
+    {
+        // Use PointerEventData to check UI interaction
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current)
+            {
+                position = Mouse.current.position.ReadValue()
+            };
+
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+
+            // Check for specific UI elements (e.g., "Joystick")
+            foreach (var result in results)
+            {
+                if (result.gameObject.CompareTag("Joystick"))
+                {
+                    return true; // Pointer is over the joystick
+                }
+            }
+        }
+        return false; // Pointer is not over specific UI
     }
 }
