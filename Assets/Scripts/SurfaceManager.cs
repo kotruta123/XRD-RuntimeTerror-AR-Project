@@ -55,17 +55,24 @@ public class SurfaceManager : MonoBehaviour
     {
         if (detectedPlane != null && !gamePlaced)
         {
-            // Position the game content
-            gameContent.transform.position = detectedPlane.transform.position;
-            gameContent.transform.rotation = detectedPlane.transform.rotation;
-
-            // Position the targetLine relative to the detected plane
+            // Get the center of the detected plane
             Vector3 planeCenter = detectedPlane.transform.position;
-            targetLine.position = planeCenter + detectedPlane.transform.forward * targetLineOffset;
+
+            // Ensure the game is placed in front of the camera at the detected plane's position
+            Vector3 cameraForward = Camera.main.transform.forward;
+            cameraForward.y = 0; // Keep the placement on the horizontal plane
+            cameraForward.Normalize();
+
+            // Adjust the game content to face the camera and stay centered on the plane
+            gameContent.transform.position = planeCenter + cameraForward * 0.5f; // Slightly in front of the detected plane
+            gameContent.transform.rotation = Quaternion.LookRotation(cameraForward);
+
+            // Position the target line relative to the detected plane
+            targetLine.position = planeCenter + cameraForward * targetLineOffset;
             targetLine.position = new Vector3(targetLine.position.x, planeCenter.y, targetLine.position.z);
 
-            // Position the spawnPoint relative to the detected plane
-            spawnPoint.position = planeCenter + detectedPlane.transform.forward * spawnPointOffset;
+            // Position the spawn point relative to the detected plane
+            spawnPoint.position = planeCenter + cameraForward * spawnPointOffset;
             spawnPoint.position = new Vector3(spawnPoint.position.x, planeCenter.y, spawnPoint.position.z);
 
             // Activate the game content
@@ -85,6 +92,7 @@ public class SurfaceManager : MonoBehaviour
             DisablePlanes();
         }
     }
+
 
     private ARPlane GetFirstPlane()
     {
