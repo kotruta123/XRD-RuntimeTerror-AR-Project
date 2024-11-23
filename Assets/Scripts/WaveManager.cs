@@ -79,7 +79,7 @@ public class WaveManager : MonoBehaviour
         }
 
         // Add randomness to the spawn position
-        Vector3 randomOffset = new Vector3(Random.Range(-2f, 2f), 0f, Random.Range(0f, 2f));
+        Vector3 randomOffset = new Vector3(0f, 0f, Random.Range(-1f, 1f));
         Vector3 spawnPosition = spawnPoint.position + randomOffset;
 
         GameObject goblin = Instantiate(goblinPrefab, spawnPosition, Quaternion.identity);
