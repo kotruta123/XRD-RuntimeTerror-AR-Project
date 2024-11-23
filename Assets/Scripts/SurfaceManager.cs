@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -10,19 +9,23 @@ public class SurfaceManager : MonoBehaviour
     public GameObject findSurfaceText;      // UI Text prompting to find a surface
     public Transform targetLine;            // The target line (e.g., kingdom wall)
     public Transform spawnPoint;            // The spawn point for goblins
-    public GameObject fixedJoystick;        // UI Joystick to control daragon
+    public GameObject fixedJoystick;        // UI Joystick to control the dragon
     public GameObject startGameButton;      // UI Button to start the game
     public float targetLineOffset = 1f;     // Offset distance from the plane center for the target line
     public float spawnPointOffset = 5f;     // Offset distance from the plane center for the spawn point
+    public float cameraHeightOffset = 4f;   // Height offset for the camera
 
     private ARPlane detectedPlane = null;   // The detected AR plane or mock plane
     private ARPlaneManager planeManager;    // ARPlaneManager for detecting real AR planes
+    private ARAnchorManager anchorManager;  // ARAnchorManager for fixing content to the plane
+    private ARAnchor gameAnchor = null;     // Anchor for the game content
     private bool gamePlaced = false;        // Tracks if the game has been placed
 
     private void Start()
     {
-        // Get the ARPlaneManager component
+        // Get the ARPlaneManager and ARAnchorManager components
         planeManager = FindObjectOfType<ARPlaneManager>();
+        anchorManager = FindObjectOfType<ARAnchorManager>();
 
         // Ensure initial UI state
         placeGameButton.SetActive(false);
@@ -53,27 +56,47 @@ public class SurfaceManager : MonoBehaviour
 
     public void PlaceGame()
     {
+        
+
         if (detectedPlane != null && !gamePlaced)
         {
-            // Get the center of the detected plane
-            Vector3 planeCenter = detectedPlane.transform.position;
+            // Create an anchor at the detected plane's position
+            gameAnchor = anchorManager.AttachAnchor(detectedPlane, new Pose(detectedPlane.center, Quaternion.identity));
+            if (gameAnchor == null)
+            {
+                Debug.LogError("Failed to create anchor. Game placement aborted.");
+                return;
+            }
 
-            // Ensure the game is placed in front of the camera at the detected plane's position
+            // Attach the game content to the anchor
+            gameContent.transform.SetParent(gameAnchor.transform);
+
+            // Adjust the game content position relative to the plane
+            gameContent.transform.localPosition = Vector3.zero;
+            gameContent.transform.localRotation = Quaternion.identity;
+
+            // Set the dragon's height explicitly
+            Vector3 adjustedPosition = gameContent.transform.position;
+            adjustedPosition.y = detectedPlane.transform.position.y + 0.7f; // Add height offset
+            gameContent.transform.position = adjustedPosition;
+
+            // Calculate forward direction from the camera
             Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0; // Keep the placement on the horizontal plane
+            cameraForward.y = 0; // Keep it on the horizontal plane
             cameraForward.Normalize();
 
-            // Adjust the game content to face the camera and stay centered on the plane
-            gameContent.transform.position = planeCenter + cameraForward * 0.5f; // Slightly in front of the detected plane
-            gameContent.transform.rotation = Quaternion.LookRotation(cameraForward);
+            // Position and rotate the target line
+            Vector3 targetLinePosition = detectedPlane.center + cameraForward * targetLineOffset;
+            targetLine.position = new Vector3(targetLinePosition.x, detectedPlane.transform.position.y, targetLinePosition.z);
+            targetLine.rotation = Quaternion.LookRotation(detectedPlane.center - targetLine.position);
 
-            // Position the target line relative to the detected plane
-            targetLine.position = planeCenter + cameraForward * targetLineOffset;
-            targetLine.position = new Vector3(targetLine.position.x, planeCenter.y, targetLine.position.z);
+            // Position and rotate the spawn point
+            Vector3 spawnPointPosition = detectedPlane.center + cameraForward * spawnPointOffset;
+            spawnPoint.position = new Vector3(spawnPointPosition.x, detectedPlane.transform.position.y, spawnPointPosition.z);
+            spawnPoint.rotation = Quaternion.LookRotation(targetLine.position - spawnPoint.position);
 
-            // Position the spawn point relative to the detected plane
-            spawnPoint.position = planeCenter + cameraForward * spawnPointOffset;
-            spawnPoint.position = new Vector3(spawnPoint.position.x, planeCenter.y, spawnPoint.position.z);
+            // Adjust the camera for a better view
+            AdjustCameraPosition(detectedPlane.transform.position);
 
             // Activate the game content
             gameContent.SetActive(true);
@@ -93,26 +116,8 @@ public class SurfaceManager : MonoBehaviour
         }
     }
 
-
     private ARPlane GetFirstPlane()
     {
-        //// Find the mock plane by its tag
-        //GameObject mockPlane = GameObject.FindWithTag("MockPlane");
-
-        //if (mockPlane != null)
-        //{
-        //    // Ensure the mock plane has an ARPlane component (to simulate AR functionality)
-        //    ARPlane mockARPlane = mockPlane.GetComponent<ARPlane>();
-        //    if (mockARPlane == null)
-        //    {
-        //        mockARPlane = mockPlane.AddComponent<ARPlane>();
-        //    }
-        //    return mockARPlane;
-        //}
-
-        //return null; // No mock plane found
-
-        // Detect AR planes on a real device
         foreach (var plane in planeManager.trackables)
         {
             if (plane.alignment == PlaneAlignment.HorizontalUp) // Only consider horizontal planes
@@ -132,6 +137,23 @@ public class SurfaceManager : MonoBehaviour
                 plane.gameObject.SetActive(false); // Hide plane visuals
             }
             planeManager.enabled = false; // Stop further plane detection
+        }
+    }
+
+    private void AdjustCameraPosition(Vector3 planePosition)
+    {
+        Camera mainCamera = Camera.main;
+        if (mainCamera != null)
+        {
+            // Position the camera above and slightly behind the game content
+            mainCamera.transform.position = new Vector3(
+                planePosition.x,
+                planePosition.y + cameraHeightOffset, // Adjust the height
+                planePosition.z - 3f                  // Adjust the distance
+            );
+
+            // Rotate the camera to look directly at the game content
+            mainCamera.transform.LookAt(planePosition + Vector3.up * 0.5f); // Look slightly above the plane center
         }
     }
 }
