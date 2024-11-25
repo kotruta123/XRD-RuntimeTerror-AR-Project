@@ -1,13 +1,12 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.SceneManagement;
-
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject startButton; // Reference to the Start Button
+    public GameObject startButton;    // Reference to the Start Button
     public GameObject restartButton; // Reference to the Restart Button
-    public WaveManager waveManager; // Reference to the WaveManager
+    public WaveManager waveManager;  // Reference to the WaveManager
+    public TargetLine targetLine;    // Reference to the TargetLine for game-over detection
 
     private bool isGameOver = false;
 
@@ -28,6 +27,12 @@ public class GameManager : MonoBehaviour
         if (waveManager != null)
         {
             waveManager.enabled = false;
+        }
+
+        // Subscribe to the TargetLine destruction event
+        if (targetLine != null)
+        {
+            targetLine.OnTargetLineDestroyed += HandleGameOver;
         }
     }
 
@@ -71,7 +76,13 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Debug.Log("Restarting game...");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene
         Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene
+    }
+
+    private void HandleGameOver()
+    {
+        // Trigger Game Over when the target line is destroyed
+        GameOver("Game Over! The treasure was destroyed!");
     }
 }

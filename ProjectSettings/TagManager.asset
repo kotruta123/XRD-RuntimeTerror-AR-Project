@@ -9,8 +9,8 @@ TagManager:
   - Fireball
   - TargetLine
   - Dragon
-  - MockPlane
   - Joystick
+  - MockPlane
   layers:
   - Default
   - TransparentFX

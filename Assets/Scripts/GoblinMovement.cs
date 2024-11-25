@@ -11,6 +11,7 @@ public class GoblinMovement : MonoBehaviour
     private Vector3 targetPosition;
     private Animation animationComponent; // Reference to the legacy Animation component
     private bool isDead = false; // Prevent further movement after death
+    private bool hasReachedTarget = false; // Prevent multiple calls to target logic
 
     // Events for goblin actions
     public Action OnReachTarget; // Triggered when goblin reaches the target
@@ -34,7 +35,7 @@ public class GoblinMovement : MonoBehaviour
 
     private void Update()
     {
-        if (isDead) return; // Stop movement if the goblin is dead
+        if (isDead || hasReachedTarget) return; // Stop movement if dead or target reached
 
         // Calculate distance to the target
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -46,7 +47,6 @@ public class GoblinMovement : MonoBehaviour
         // Switch to walk animation
         animationComponent.CrossFade("walk");
         MoveTowardsTarget(movementSpeed); // Walk at normal speed
-        
 
         // Check if the goblin has reached the target
         if (distance < 0.1f)
@@ -74,8 +74,11 @@ public class GoblinMovement : MonoBehaviour
 
     private void ReachTarget()
     {
-        if (isDead) return; // Don't trigger target logic if dead
+        if (isDead || hasReachedTarget) return; // Don't trigger target logic if dead or already processed
+
+        hasReachedTarget = true; // Mark as having reached the target
         Debug.Log("Goblin reached the target!");
+
         OnReachTarget?.Invoke(); // Trigger the event to notify WaveManager
         Destroy(gameObject); // Destroy the goblin
     }
