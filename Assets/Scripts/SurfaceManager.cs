@@ -15,7 +15,7 @@ public class SurfaceManager : MonoBehaviour
     public GameObject healthTextUI;         // The health text UI
     public float targetLineOffset = 1f;     // Offset distance from the plane center for the target line
     public float spawnPointOffset = 5f;     // Offset distance from the plane center for the spawn point
-    public float cameraHeightOffset = 4f;   // Height offset for the camera
+    public float cameraHeightOffset = 10f;   // Height offset for the camera
 
     private ARPlane detectedPlane = null;   // The detected AR plane or mock plane
     private ARPlaneManager planeManager;    // ARPlaneManager for detecting real AR planes
@@ -49,6 +49,7 @@ public class SurfaceManager : MonoBehaviour
         if (detectedPlane == null)
         {
             detectedPlane = GetFirstPlane(); // Detect a plane
+
         }
 
         if (detectedPlane != null && !placeGameButton.activeSelf)
@@ -60,47 +61,29 @@ public class SurfaceManager : MonoBehaviour
 
     public void PlaceGame()
     {
-        
-
         if (detectedPlane != null && !gamePlaced)
         {
             // Create an anchor at the detected plane's position
-            gameAnchor = anchorManager.AttachAnchor(detectedPlane, new Pose(detectedPlane.center, Quaternion.identity));
+            Pose planePose = new Pose(detectedPlane.center, Quaternion.identity);
+            gameAnchor = anchorManager.AttachAnchor(detectedPlane, planePose);
             if (gameAnchor == null)
             {
                 Debug.LogError("Failed to create anchor. Game placement aborted.");
                 return;
             }
 
-            // Attach the game content to the anchor
-            gameContent.transform.SetParent(gameAnchor.transform);
+            // Parent the game content to the anchor
+            gameContent.transform.SetParent(gameAnchor.transform, worldPositionStays: false);
 
-            // Adjust the game content position relative to the plane
+            // Adjust game content to align with the plane
             gameContent.transform.localPosition = Vector3.zero;
             gameContent.transform.localRotation = Quaternion.identity;
 
-            // Set the dragon's height explicitly
-            Vector3 adjustedPosition = gameContent.transform.position;
-            adjustedPosition.y = detectedPlane.transform.position.y + 0.7f; // Add height offset
-            gameContent.transform.position = adjustedPosition;
-
-            // Calculate forward direction from the camera
-            Vector3 cameraForward = Camera.main.transform.forward;
-            cameraForward.y = 0; // Keep it on the horizontal plane
-            cameraForward.Normalize();
-
-            // Position and rotate the target line
-            Vector3 targetLinePosition = detectedPlane.center + cameraForward * targetLineOffset;
-            targetLine.position = new Vector3(targetLinePosition.x, detectedPlane.transform.position.y, targetLinePosition.z);
-            targetLine.rotation = Quaternion.LookRotation(detectedPlane.center - targetLine.position);
-
-            // Position and rotate the spawn point
-            Vector3 spawnPointPosition = detectedPlane.center + cameraForward * spawnPointOffset;
-            spawnPoint.position = new Vector3(spawnPointPosition.x, detectedPlane.transform.position.y, spawnPointPosition.z);
-            spawnPoint.rotation = Quaternion.LookRotation(targetLine.position - spawnPoint.position);
+            // Ensure the target line and spawn point are aligned to the plane
+            AlignGameElementsToPlane();
 
             // Adjust the camera for a better view
-            AdjustCameraPosition(detectedPlane.transform.position);
+            AdjustCameraPosition(gameAnchor.transform.position);
 
             // Activate the game content
             gameContent.SetActive(true);
@@ -111,7 +94,7 @@ public class SurfaceManager : MonoBehaviour
             // Mark the game as placed
             gamePlaced = true;
 
-            // Activate UI
+            // Activate UI elements
             startGameButton.gameObject.SetActive(true);
             fixedJoystick.SetActive(true);
             healthBarUI.SetActive(true);
@@ -121,6 +104,28 @@ public class SurfaceManager : MonoBehaviour
             DisablePlanes();
         }
     }
+
+    private void AlignGameElementsToPlane()
+    {
+        Vector3 planePosition = detectedPlane.transform.position;
+
+        // Calculate forward direction based on the camera
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0; // Keep direction on the horizontal plane
+        cameraForward.Normalize();
+
+        // Position and rotate the target line
+        Vector3 targetLinePosition = planePosition + cameraForward * targetLineOffset;
+        targetLine.position = new Vector3(targetLinePosition.x, planePosition.y, targetLinePosition.z);
+        targetLine.rotation = Quaternion.LookRotation(planePosition - targetLine.position);
+
+        // Position and rotate the spawn point
+        Vector3 spawnPointPosition = planePosition + cameraForward * spawnPointOffset;
+        spawnPoint.position = new Vector3(spawnPointPosition.x, planePosition.y, spawnPointPosition.z);
+        spawnPoint.rotation = Quaternion.LookRotation(targetLine.position - spawnPoint.position);
+    }
+
+
 
     private ARPlane GetFirstPlane()
     {
@@ -152,10 +157,11 @@ public class SurfaceManager : MonoBehaviour
         if (mainCamera != null)
         {
             // Position the camera above and slightly behind the game content
+            float optimalDistance = 10f;
             mainCamera.transform.position = new Vector3(
                 planePosition.x,
-                planePosition.y + cameraHeightOffset, // Adjust the height
-                planePosition.z - 3f                  // Adjust the distance
+                planePosition.y + cameraHeightOffset, // Height offset
+                planePosition.z - optimalDistance    // Distance offset
             );
 
             // Rotate the camera to look directly at the game content

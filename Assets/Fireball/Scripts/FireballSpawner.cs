@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using static System.Net.Mime.MediaTypeNames;
 
 public class FireballSpawner : MonoBehaviour
 {
@@ -10,72 +9,59 @@ public class FireballSpawner : MonoBehaviour
     public Transform fireballSpawnPoint; // The point where the fireball will be spawned
     public float fireballSpeed = 2f; // Speed of the fireball
 
-    private PlayerInputActions inputActions; // Stores the player's input actions
     private GameObject activeFireball; // Tracks the currently active fireball
-    private bool isPointerOverUI = false; // Tracks if the pointer is over the UI
-
-    private void Awake()
-    {
-        // Initialize input actions
-        inputActions = new PlayerInputActions();
-    }
-
-    private void OnEnable()
-    {
-        // Enable input actions and register the click/touch event
-        inputActions.Player.Enable();
-        inputActions.Player.Click.performed += OnClickPerformed;
-    }
-
-    private void OnDisable()
-    {
-        // Disable input actions and unregister the click/touch event
-        inputActions.Player.Click.performed -= OnClickPerformed;
-        inputActions.Player.Disable();
-    }
 
     private void Update()
     {
-        // Continuously track whether the pointer is over the UI
-        if (UnityEngine.Application.isEditor) // In the Editor, track mouse position
+        // Detect inputs based on platform
+#if UNITY_EDITOR
+        HandleMouseInput(); // Editor: Handle mouse clicks
+#else
+        HandleTouchInput(); // Device: Handle touch input
+#endif
+    }
+
+    private void HandleMouseInput()
+    {
+        if (Mouse.current.leftButton.wasPressedThisFrame) // Check for left mouse button press
         {
-            isPointerOverUI = IsPointerOverSpecificUI(Mouse.current.position.ReadValue());
-        }
-        else if (Input.touchCount > 0) // On a device, track touch position
-        {
-            isPointerOverUI = IsPointerOverSpecificUI(Input.GetTouch(0).position);
-        }
-        else
-        {
-            Debug.Log("No touch detected.");
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
+
+            // Check if the mouse click is over UI
+            if (IsPointerOverSpecificUI(mousePosition))
+            {
+                Debug.Log("Mouse click is over the UI. Ignoring input.");
+                return;
+            }
+
+            // Process the raycast from the mouse position
+            ProcessClickOrTouch(mousePosition);
         }
     }
 
-    private void OnClickPerformed(InputAction.CallbackContext context)
+
+    // Handles touch input for devices
+    private void HandleTouchInput()
     {
-        Vector2 screenPosition;
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
 
-        // Get the screen position from mouse or touch
-        if (UnityEngine.Application.isEditor) // Editor (mouse input)
-        {
-            screenPosition = Mouse.current.position.ReadValue();
-        }
-        else if (Input.touchCount > 0) // Device (touch input)
-        {
-            screenPosition = Input.GetTouch(0).position;
-        }
-        else
-        {
-            return; // No valid input detected
-        }
+            // Check if the touch is over UI
+            if (IsPointerOverSpecificUI(touchPosition))
+            {
+                Debug.Log("Touch is over the UI. Ignoring input.");
+                return;
+            }
 
-        // Check if the pointer is over a specific UI element
-        if (isPointerOverUI)
-        {
-            Debug.Log("Pointer is over the joystick or other UI. Raycast ignored.");
-            return;
+            // Process the raycast from the touch position
+            ProcessClickOrTouch(touchPosition);
         }
+    }
 
+    // Processes the raycast for either mouse or touch input
+    private void ProcessClickOrTouch(Vector2 screenPosition)
+    {
         // Prevent shooting another fireball if one is already active
         if (activeFireball != null)
         {
@@ -87,24 +73,26 @@ public class FireballSpawner : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
         RaycastHit hit;
-
-        // Check if the Raycast hits any object
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             // Check if the clicked/tapped object is tagged as "Goblin"
             if (hit.collider.CompareTag("Goblin"))
             {
-                Debug.Log($"Goblin clicked: {hit.collider.name}");
+                Debug.Log($"Goblin detected: {hit.collider.name}");
                 ShootFireball(hit.collider.transform); // Shoot a fireball at the goblin
+            }
+            else
+            {
+                Debug.Log($"Raycast hit: {hit.collider.name}, but it's not a goblin.");
             }
         }
         else
         {
-            // Log if the Raycast does not hit anything
             Debug.Log("Raycast did not hit anything.");
         }
     }
 
+    // Shoots the fireball at the given target
     private void ShootFireball(Transform target)
     {
         // Instantiate the fireball at the spawn point
@@ -124,9 +112,9 @@ public class FireballSpawner : MonoBehaviour
         activeFireball = null;
     }
 
+    // Checks if the pointer is over a UI element
     private bool IsPointerOverSpecificUI(Vector2 screenPosition)
     {
-        // Use PointerEventData to check UI interaction
         PointerEventData eventData = new PointerEventData(EventSystem.current)
         {
             position = screenPosition
@@ -135,7 +123,6 @@ public class FireballSpawner : MonoBehaviour
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, results);
 
-        // Check for specific UI elements (e.g., "Joystick")
         foreach (var result in results)
         {
             if (result.gameObject.CompareTag("Joystick")) // Replace with the tag of your specific UI
@@ -143,6 +130,7 @@ public class FireballSpawner : MonoBehaviour
                 return true; // Pointer is over the joystick or specified UI
             }
         }
+
         return false; // Pointer is not over specific UI
     }
 }
