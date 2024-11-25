@@ -23,6 +23,10 @@ public class WaveManager : MonoBehaviour
     public delegate void GameOverDelegate(string message); // Delegate for game end messages
     public event GameOverDelegate OnGameEnd;              // Event triggered when the game ends
 
+    public float speedMultiplier = 0.1f; // Multiplier to increase goblin speed each wave
+    private float currentSpeedMultiplier = 1f; // Tracks the current speed multiplier
+
+
     private void Start()
     {
         UpdateGoblinsRemainingText(0); // Set initial goblin count
@@ -60,6 +64,9 @@ public class WaveManager : MonoBehaviour
 
             // Increment goblins per wave for the next wave
             goblinsPerWave += 2;
+
+            // Increase the speed multiplier for the next wave
+            currentSpeedMultiplier *= speedMultiplier;
 
             Debug.Log($"Wave {currentWave} cleared!");
             UpdateWaveNotification($"Wave {currentWave} Cleared!");
@@ -111,6 +118,9 @@ public class WaveManager : MonoBehaviour
         {
             // Assign a dynamic spread target along the wall
             Vector3 spreadTarget = CalculateSpreadTarget();
+
+            // Apply speed multiplier to the goblin
+            goblinMovement.SetSpeedMultiplier(currentSpeedMultiplier);
 
             // Assign the target position slightly offset
             goblinMovement.SetTarget(spreadTarget);

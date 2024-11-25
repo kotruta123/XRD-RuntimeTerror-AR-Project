@@ -82,4 +82,10 @@ public class GoblinMovement : MonoBehaviour
         OnReachTarget?.Invoke(); // Trigger the event to notify WaveManager
         Destroy(gameObject); // Destroy the goblin
     }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        movementSpeed *= multiplier; // Scale the movement speed
+    }
+
 }
