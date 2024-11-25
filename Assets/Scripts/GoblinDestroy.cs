@@ -19,8 +19,6 @@ public class GoblinDestroy : MonoBehaviour
         {
             health--; // Decrease the goblin's health
 
-            Destroy(collision.gameObject); // Destroy the fireball
-
             if (health <= 0)
             {
                 Die(); // Destroy the goblin if health is 0 or less

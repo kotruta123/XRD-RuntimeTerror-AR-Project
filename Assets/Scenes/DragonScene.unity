@@ -9728,6 +9728,7 @@ MonoBehaviour:
   goblinsPerWave: 5
   spawnInterval: 0.5
   totalWaves: 5
+  speedMultiplier: 0.1
 --- !u!4 &1489584122
 Transform:
   m_ObjectHideFlags: 0

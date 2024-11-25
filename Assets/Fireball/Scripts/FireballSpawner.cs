@@ -45,6 +45,10 @@ public class FireballSpawner : MonoBehaviour
         {
             isPointerOverUI = IsPointerOverSpecificUI(Input.GetTouch(0).position);
         }
+        else
+        {
+            Debug.Log("No touch detected.");
+        }
     }
 
     private void OnClickPerformed(InputAction.CallbackContext context)
