@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.XR.ARFoundation; // Required for ARPlane and ARPlaneManager
+using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 public class DragonMovement : MonoBehaviour

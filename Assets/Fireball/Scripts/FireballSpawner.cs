@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class FireballSpawner : MonoBehaviour
 {
@@ -8,38 +9,59 @@ public class FireballSpawner : MonoBehaviour
     public Transform fireballSpawnPoint; // The point where the fireball will be spawned
     public float fireballSpeed = 2f; // Speed of the fireball
 
-    private PlayerInputActions inputActions; // Stores the player's input actions
     private GameObject activeFireball; // Tracks the currently active fireball
-    
-    private void Awake()
+
+    private void Update()
     {
-        // Initialize input actions
-        inputActions = new PlayerInputActions();
+        // Detect inputs based on platform
+#if UNITY_EDITOR
+        HandleMouseInput(); // Editor: Handle mouse clicks
+#else
+        HandleTouchInput(); // Device: Handle touch input
+#endif
     }
 
-    private void OnEnable()
+    private void HandleMouseInput()
     {
-        // Enable input actions and register the click event
-        inputActions.Player.Enable();
-        inputActions.Player.Click.performed += OnClickPerformed;
-    }
-
-    private void OnDisable()
-    {
-        // Disable input actions and unregister the click event
-        inputActions.Player.Click.performed -= OnClickPerformed;
-        inputActions.Player.Disable();
-    }
-
-    private void OnClickPerformed(InputAction.CallbackContext context)
-    {
-        // Check if the pointer is over a UI element, and ignore clicks on UI
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        if (Mouse.current.leftButton.wasPressedThisFrame) // Check for left mouse button press
         {
-            Debug.Log("Pointer is over a UI element. Raycast ignored.");
-            return;
-        }
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
 
+            // Check if the mouse click is over UI
+            if (IsPointerOverSpecificUI(mousePosition))
+            {
+                Debug.Log("Mouse click is over the UI. Ignoring input.");
+                return;
+            }
+
+            // Process the raycast from the mouse position
+            ProcessClickOrTouch(mousePosition);
+        }
+    }
+
+
+    // Handles touch input for devices
+    private void HandleTouchInput()
+    {
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            Vector2 touchPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+
+            // Check if the touch is over UI
+            if (IsPointerOverSpecificUI(touchPosition))
+            {
+                Debug.Log("Touch is over the UI. Ignoring input.");
+                return;
+            }
+
+            // Process the raycast from the touch position
+            ProcessClickOrTouch(touchPosition);
+        }
+    }
+
+    // Processes the raycast for either mouse or touch input
+    private void ProcessClickOrTouch(Vector2 screenPosition)
+    {
         // Prevent shooting another fireball if one is already active
         if (activeFireball != null)
         {
@@ -47,28 +69,26 @@ public class FireballSpawner : MonoBehaviour
             return;
         }
 
-        // Create a Raycast from the camera through the mouse position
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        // Create a Raycast from the camera through the screen position
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
         RaycastHit hit;
-
-        // Check if the Raycast hits any object
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-            // Check if the clicked object is tagged as "Goblin"
+            // Check if the clicked/tapped object is tagged as "Goblin"
             if (hit.collider.CompareTag("Goblin"))
             {
-                Debug.Log($"Goblin clicked: {hit.collider.name}");
+                Debug.Log($"Goblin detected: {hit.collider.name}");
                 ShootFireball(hit.collider.transform); // Shoot a fireball at the goblin
             }
         }
         else
         {
-            // Log if the Raycast does not hit anything
             Debug.Log("Raycast did not hit anything.");
         }
     }
 
+    // Shoots the fireball at the given target
     private void ShootFireball(Transform target)
     {
         // Instantiate the fireball at the spawn point
@@ -86,5 +106,27 @@ public class FireballSpawner : MonoBehaviour
     private void OnFireballDestroyed()
     {
         activeFireball = null;
+    }
+
+    // Checks if the pointer is over a UI element
+    private bool IsPointerOverSpecificUI(Vector2 screenPosition)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = screenPosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject.CompareTag("Joystick")) // Replace with the tag of your specific UI
+            {
+                return true; // Pointer is over the joystick or specified UI
+            }
+        }
+
+        return false; // Pointer is not over specific UI
     }
 }
