@@ -11,8 +11,6 @@ public class SurfaceManager : MonoBehaviour
     public Transform spawnPoint;            // The spawn point for goblins
     public GameObject fixedJoystick;        // UI Joystick to control the dragon
     public GameObject startGameButton;      // UI Button to start the game
-    public GameObject healthBarUI;          // The health bar UI
-    public GameObject healthTextUI;         // The health text UI
     public float targetLineOffset = 1f;     // Offset distance from the plane center for the target line
     public float spawnPointOffset = 5f;     // Offset distance from the plane center for the spawn point
     public float cameraHeightOffset = 10f;   // Height offset for the camera
@@ -35,8 +33,6 @@ public class SurfaceManager : MonoBehaviour
         startGameButton.gameObject.SetActive(false);
         fixedJoystick.SetActive(false);
         gameContent.SetActive(false);
-        healthBarUI.SetActive(false);
-        healthTextUI.SetActive(false);
     }
 
     private void Update()
@@ -97,8 +93,6 @@ public class SurfaceManager : MonoBehaviour
             // Activate UI elements
             startGameButton.gameObject.SetActive(true);
             fixedJoystick.SetActive(true);
-            healthBarUI.SetActive(true);
-            healthTextUI.SetActive(true);
 
             // Optionally hide plane visuals
             DisablePlanes();

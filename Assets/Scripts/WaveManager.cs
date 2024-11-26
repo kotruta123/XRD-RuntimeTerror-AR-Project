@@ -12,6 +12,8 @@ public class WaveManager : MonoBehaviour
     public TextMeshProUGUI waveNotificationText; // Assign the UI Text for wave notifications
     public TextMeshProUGUI gameOverText;    // Assign the UI Text for game over messages
     public TextMeshProUGUI goblinsRemainingText; // Assign the UI Text for goblin count
+    public GameObject healthBarUI;          // The health bar UI
+    public GameObject healthTextUI;         // The health text UI
     public int goblinsPerWave = 5;          // Number of goblins in the first wave
     public float spawnInterval = 0.5f;      // Delay between spawns
     public int totalWaves = 5;              // Total number of waves
@@ -32,6 +34,9 @@ public class WaveManager : MonoBehaviour
         UpdateGoblinsRemainingText(0); // Set initial goblin count
         StartCoroutine(SpawnWave());
         UpdateGameOverText(""); // Clear game-over text at the start
+
+        healthBarUI.SetActive(true);
+        healthTextUI.SetActive(true);
 
         // Subscribe to TargetLine destruction event
         if (targetLineScript != null)
