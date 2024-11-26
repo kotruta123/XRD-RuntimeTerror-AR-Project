@@ -154,7 +154,7 @@ public class WaveManager : MonoBehaviour
     private void HandleTargetLineDestroyed()
     {
         // End the game when the target line is destroyed
-        EndGame("Game Over! The treasure was destroyed!", Color.red);
+        EndGame("Game Over! The wall was destroyed!", Color.red);
     }
 
     private void EndGame(string message, Color textColor)

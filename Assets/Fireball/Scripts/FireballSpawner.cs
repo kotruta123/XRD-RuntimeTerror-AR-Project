@@ -81,10 +81,6 @@ public class FireballSpawner : MonoBehaviour
                 Debug.Log($"Goblin detected: {hit.collider.name}");
                 ShootFireball(hit.collider.transform); // Shoot a fireball at the goblin
             }
-            else
-            {
-                Debug.Log($"Raycast hit: {hit.collider.name}, but it's not a goblin.");
-            }
         }
         else
         {

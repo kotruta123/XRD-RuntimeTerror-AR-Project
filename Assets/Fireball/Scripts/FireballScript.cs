@@ -21,6 +21,11 @@ public class FireballScript : MonoBehaviour
         {
             MoveTowardsTarget(); // Move the fireball toward the target
         }
+        else
+        {
+            DestroyFireball(); // Destroy immediately if no target
+        }
+
         _audioSource = GetComponent<AudioSource>();
         if (_audioSource != null)
         {
@@ -39,28 +44,32 @@ public class FireballScript : MonoBehaviour
 
     private void Update()
     {
-        // Check if the fireball is close to the target
-        if (target != null)
+        if (target == null)
         {
-            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+            Debug.Log("Target disappeared. Destroying fireball.");
+            DestroyFireball();
+            return;
+        }
 
-            if (distanceToTarget < closeRange)
-            {
-                Debug.Log($"Fireball close to target: Distance {distanceToTarget}");
-                closeRangeTimer += Time.deltaTime;
+        // Check if the fireball is close to the target
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                // Destroy the fireball if it has been close for too long
-                if (closeRangeTimer > closeRangeTimeout)
-                {
-                    Debug.Log("Fireball missed goblin and is being destroyed due to timeout.");
-                    Destroy(gameObject);
-                }
-            }
-            else
+        if (distanceToTarget < closeRange)
+        {
+            Debug.Log($"Fireball close to target: Distance {distanceToTarget}");
+            closeRangeTimer += Time.deltaTime;
+
+            // Destroy the fireball if it has been close for too long
+            if (closeRangeTimer > closeRangeTimeout)
             {
-                // Reset the timer if the fireball is no longer close
-                closeRangeTimer = 0f;
+                Debug.Log("Fireball missed goblin and is being destroyed due to timeout.");
+                DestroyFireball();
             }
+        }
+        else
+        {
+            // Reset the timer if the fireball is no longer close
+            closeRangeTimer = 0f;
         }
     }
 
@@ -69,7 +78,10 @@ public class FireballScript : MonoBehaviour
         // Calculate the direction to the target and set the velocity
         if (target != null)
         {
-            Vector3 direction = (target.position - transform.position).normalized;
+            // Adjust the target position to aim for the goblin's center
+            Vector3 targetPosition = target.position + Vector3.up * 0.6f;
+
+            Vector3 direction = (targetPosition - transform.position).normalized;
             rb.linearVelocity = direction * speed;
         }
     }
@@ -81,17 +93,15 @@ public class FireballScript : MonoBehaviour
         {
             Debug.Log("Fireball collided with Goblin!");
             Explode(); // Trigger the explosion effect
-            Destroy(gameObject); // Destroy the fireball
+            DestroyFireball(); // Destroy the fireball
         }
     }
 
-    private void OnDestroy()
+    private void DestroyFireball()
     {
         // Notify the spawner that the fireball has been destroyed
-        if (onFireballDestroyed != null)
-        {
-            onFireballDestroyed?.Invoke();
-        }
+        onFireballDestroyed?.Invoke();
+        Destroy(gameObject);
     }
 
     private void Explode()
