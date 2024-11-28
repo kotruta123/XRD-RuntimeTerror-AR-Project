@@ -9,9 +9,9 @@
 2. **[Joystick Pack](#)**  
    A versatile joystick controller pack for AR navigation.  
    *[View Asset on Unity Asset Store](https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631)*
-   
+
 3. **[25+ Free Stylized Textures - Grass, Ground, Floors, Walls & More](#)**  
-   A collection of textures used to design the game in a fantasy style.
+   A collection of textures used to design the game in a fantasy style.  
    *[View Asset on Unity Asset Store](https://assetstore.unity.com/packages/2d/textures-materials/25-free-stylized-textures-grass-ground-floors-walls-more-241895)*
 
 4. **[Goblin](#)**  
@@ -19,6 +19,6 @@
    *[View Asset on Unity Asset Store](https://assetstore.unity.com/packages/3d/characters/humanoids/fantasy/goblin-12131)*
 
 5. **[Treasure Set - Free Chest](#)**  
-   A chest model used to add a visually appealing reward element.
-   *[View Asset on Unity Asset Store](https://assetstore.unity.com/packages/2d/textures-materials/25-free-stylized-textures-grass-ground-floors-walls-more-241895)*
-
+   A chest model used to add a visually appealing reward element.  
+   *[View Asset on Unity Asset Store](https://assetstore.unity.com/packages/3d/props/interior/treasure-set-free-chest-72345)*
+   
