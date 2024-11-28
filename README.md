@@ -22,3 +22,11 @@
    A chest model used to add a visually appealing reward element.  
    *[View Asset on Unity Asset Store](https://assetstore.unity.com/packages/3d/props/interior/treasure-set-free-chest-72345)*
    
+## **🎥 YouTube Videos**
+1. **[AR Video Demonstration](#)**  
+   This is a demonstration of how to win the game 
+   *[View Video on Youtube]()*
+
+2. **[AR Video Demonstration](#)**  
+   This is a demonstration of how to lose the game 
+   *[View Video on Youtube]()*
