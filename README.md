@@ -27,25 +27,25 @@
    This is a demonstration of the AR project
    *[View Video on Youtube](https://www.youtube.com/shorts/FGHSviNCbIQ)*
 
-### Blog Posts
-1. **[Foundations](#)**  
+## Blog Posts
+1. **Foundations**  
     Exploring the Foundations of XR: What and Why
    *[View Blog](https://xrd-group-6.blogspot.com/2024/09/exploring-foundations-of-xr-what-and-why.html)*
-2. **[Week 2](#)**  
+2. **Week 2**  
     From Concept to First Prototype 
    *[View Blog](https://xrd-group-6.blogspot.com/2024/11/ar-game-from-concept-to-first-prototype.html)*
-3. **[Week 3](#)**  
+3. **Week 3**  
     The Dragon and his Enemies
    *[View Blog](https://xrd-group-6.blogspot.com/2024/11/the-dragon-and-his-enemies-week-3.html)*
-4. **[Week 4](#)**  
+4. **Week 4**  
     Crafting the Fireball
    *[View Blog](https://xrd-group-6.blogspot.com/2024/10/building-foundation-week-3.html)*
-5. **[Week 5](#)**  
+5. **Week 5**  
     The Bowling Concept 
    *[View Blog](https://xrd-group-6.blogspot.com/2024/11/the-bowling-concept-week-5.html)*
-6. **[Week 6](#)**  
+6. **Week 6**  
     Making the physics work 
    *[View Blog](https://xrd-group-6.blogspot.com/2024/11/making-physics-work.html)*
-7. **[Week 7](#)**  
+7. **Week 7**  
     Final Polishes 
    *[View Blog](https://xrd-group-6.blogspot.com/2024/11/final-polishes-week-7.html)*
