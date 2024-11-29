@@ -25,8 +25,5 @@
 ## **🎥 YouTube Videos**
 1. **[AR Video Demonstration](#)**  
    This is a demonstration of how to win the game 
-   *[View Video on Youtube]()*
+   *[View Video on Youtube](https://www.youtube.com/shorts/FGHSviNCbIQ)*
 
-2. **[AR Video Demonstration](#)**  
-   This is a demonstration of how to lose the game 
-   *[View Video on Youtube]()*
