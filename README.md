@@ -24,6 +24,6 @@
    
 ## **🎥 YouTube Videos**
 1. **[AR Video Demonstration](#)**  
-   This is a demonstration of how to win the game 
+   This is a demonstration of the AR project
    *[View Video on Youtube](https://www.youtube.com/shorts/FGHSviNCbIQ)*
 
