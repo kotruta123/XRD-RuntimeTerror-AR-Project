@@ -55,3 +55,5 @@
    *[View Blog](https://github.com/kotruta123/XRD-RuntimeTerror-AR-Project/blob/main/PersonalReflections/AlexandruPersonalReflection.md)*
 2. **Roberts Zustars**  
    *[View Blog](https://github.com/kotruta123/XRD-RuntimeTerror-AR-Project/blob/main/PersonalReflections/RobertsPersonalReflection.md)*
+3. **Catalin Filip**  
+   *[View Blog](https://github.com/kotruta123/XRD-RuntimeTerror-AR-Project/blob/main/PersonalReflections/CatalinPersonalReflection.md)*
