@@ -1,9 +1,7 @@
 ﻿# Alexandru's Personal Reflection
----
 
 ## Introduction
 Working on both **AR** and **VR** projects this semester has been amazing and interesting. From designing assets to environmental setup and player interaction, I got the chance to explore many areas of development. Along this road, I came to see the great promise these technologies provide and also confronted their constraints head-on.
----
 
 ## My Share of Work
 
