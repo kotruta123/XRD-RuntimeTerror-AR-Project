@@ -1,4 +1,4 @@
-﻿# Alexandru's Individual Reflection
+﻿# Alexandru's Personal Reflection
 
 ---
 
