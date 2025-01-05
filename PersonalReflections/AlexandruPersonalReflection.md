@@ -15,7 +15,6 @@ I used a joystick technique to let the dragon move more naturally on mobile devi
 - **AR Plane Manager**  
 I also worked on AR plane detection and management enhancement. I helped to make a more believable AR experience by making sure things were shown normally on surfaces in the player's environment.
 
----
 
 ### VR Project:
 - **Object Placing and Environmental Creation**  
@@ -33,14 +32,12 @@ I configured almost the whole VR bowling game environment and arranged every obj
 - **Respawning/Reset Pins & Balls**  
   Maintaining constant game flow depended critically on ensuring correct pin and ball respawning after pressing the reset button. Although I didn't first arrange the pins and balls, I helped to improve and balance these systems.
 
----
 
 ## Considerations on AR
 There are amazing chances for merging virtual components with the actual world in augmented reality. Still, I have discovered that **tracking** and **usability** remain the toughest obstacles. Not everyone wants to hold up a smartphone to explore AR; this might feel invasive and draining. Near future seamless experiences could be created in part by hardware enhancements including IR cameras and improved depth sensors.
 
 Another important realisation was the need of **realistic interaction** and **a stable plane detection system** in convincing consumers that virtual items really belong in their actual environment. Working on the AR plane manager, I demonstrated the need of precise surface detection. The illusion can be broken even by minor plane detecting errors.
 
----
 
 ## Virtual Reality Reflections
 Development of virtual reality was an intriguing blend of **technical difficulties** and **design creativity**. Creating a convincing setting for the bowling game called for realistic physics, lighting, and deliberate object placement. VR seeks to totally submerge the player, hence every aspect must be perfect.
@@ -51,7 +48,6 @@ On the VR project i worked with Catalin to solve a lot of errors that ocured the
 
 Still another fascinating element is the **physical** and **social** aspects. Although VR requires a certain physical space, it is far more interesting when it lets for pleasant social contacts. Not everyone has a room big enough for free walking around. Though VR's obvious promise for immersive entertainment and teaching uses, this space need can restrict general adoption.
 
----
 
 ## Final Notes
 Working on both AR and VR, I learnt generally that each of these developing technologies has particular challenges as **hardware constraints**, **user comfort**, or **learning curves** in the development process. Still, there is nothing like the thrill of seeing a dragon come to life on a phone screen or having bowling pins strewn in a virtual alley.
