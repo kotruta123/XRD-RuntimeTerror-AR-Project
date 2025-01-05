@@ -53,3 +53,5 @@
 ## Personal Reflections
 1. **Alexandru Cotruta**  
    *[View Blog](https://github.com/kotruta123/XRD-RuntimeTerror-AR-Project/blob/main/PersonalReflections/AlexandruPersonalReflection.md)*
+2. **Roberts Zustars**  
+   *[View Blog](https://github.com/kotruta123/XRD-RuntimeTerror-AR-Project/blob/main/PersonalReflections/RobertsPersonalReflection.md)*
