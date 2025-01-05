@@ -49,3 +49,7 @@
 7. **Week 7**  
     Final Polishes 
    *[View Blog](https://xrd-group-6.blogspot.com/2024/11/final-polishes-week-7.html)*
+
+## Personal Reflections
+1. **Alexandru Cotruta**  
+   *[View Blog]()*
