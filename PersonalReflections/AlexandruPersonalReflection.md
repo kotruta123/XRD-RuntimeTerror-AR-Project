@@ -1,4 +1,4 @@
-﻿# Alexandru's Individual Thought
+﻿# Alexandru's Individual Reflection
 
 ---
 
